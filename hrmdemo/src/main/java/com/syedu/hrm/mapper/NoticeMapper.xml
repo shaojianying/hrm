@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.syedu.hrm.mapper.NoticeMapper"><!--数据库字段名与bean属性名不一致-->
+	<resultMap id="noticeMapResult" type="Notice" autoMapping="true">
+		<result column="CREATE_DATE" property="createDate"></result>
+		<association property="user" javaType="User" column="USER_ID"
+					 select="com.syedu.hrm.mapper.UserMapper.get"></association>
+	</resultMap>
+
+	<select id="findAll" parameterType="hashmap" resultMap="noticeMapResult">
+		select *from hrm_notice
+	</select>
+	<insert id="save" parameterType="Notice" >
+		insert into hrm_notice (TITLE,CONTENT,CREATE_DATE,USER_ID)value
+		(#{title},#{content},#{createDate},#{user.id})
+	</insert>
+	<select id="selectNoticeByTitle" parameterType="String" resultType="Notice">
+		select *from hrm_notice where title like "%"#{title}"%"
+	</select>
+	<select id="get" resultType="Notice" parameterType="int">
+		select *from hrm_notice where id=#{id}
+	</select>
+	<update id="update" parameterType="Notice" >
+		update hrm_notice set TITLE=#{title},CONTENT=#{content}, CREATE_DATE=#{createDate}, USER_ID=#{userId} where id=#{id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from hrm_notice where id=#{id}
+	</delete>
+
+</mapper>

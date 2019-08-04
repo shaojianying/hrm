@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.syedu.hrm.mapper.EmployeeMapper">
+
+<!--	<resultMap id="EmployeeMap" type="com.syedu.hrm.bean.Employee">
+		<association property="Dept" javaType="Dept" column="id" select="com.syedu.hrm.mapper.DeptMapper.get"></association>
+	</resultMap>-->
+	<resultMap id="Empldemo" type="Employee" autoMapping="true">
+		<result property="cardId" column="CARD_ID"></result>
+		<result property="postCode" column="POST_CODE"></result>
+		<result property="qqNum" column="QQ_NUM"></result>
+		<result property="createDate" column="CREATE_DATE"></result>
+		<result property="deptId" column="DEPT_ID"></result>
+		<result property="jobId" column="JOB_ID"></result>
+		<association property="dept" column="dept_id" javaType="Dept" select="com.syedu.hrm.mapper.DeptMapper.get"></association>
+		<association property="job" column="job_id" javaType="Job" select="com.syedu.hrm.mapper.JobMapper.get"></association>
+
+	</resultMap>
+	<insert id="save" parameterType="Employee"  useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into hrm_employee(DEPT_ID,JOB_ID,NAME,CARD_ID,ADDRESS,POST_CODE,TEL,PHONE,QQ_NUM,EMAIL,SEX,PARTY,BIRTHDAY,RACE,EDUCATION,
+    SPECIALITY,PICTURE,HOBBY,REMARK,CREATE_DATE)
+    values (#{dept.id},#{job.id},#{name},#{cardId},#{address},#{postCode},#{tel},#{phone},#{qqNum},#{email},
+    #{sex},#{party},#{birthday},#{race},#{education},#{speciality},#{picture},#{hobby},#{remark},#{createDate});
+	</insert>
+	<select id="findAll" resultMap="Empldemo">
+		select *from hrm_employee
+	</select>
+	<delete id="delete" parameterType="int">
+		delete from hrm_employee where id=#{id}
+	</delete>
+	<select id="selectEmpById" parameterType="int" resultMap="Empldemo">
+		select *from hrm_employee where id=#{id}
+	</select>
+	<update id="update" parameterType="Employee"  useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		update hrm_employee set JOB_ID=#{job.id},
+		SEX=#{sex},
+		EDUCATION=#{education},
+		PHONE=#{phone},
+		PARTY=#{party},
+		ADDRESS=#{address},
+		BIRTHDAY=#{birthday},
+		SPECIALITY=#{speciality},
+		REMARK=#{remark},
+		CARD_ID=#{cardId},
+		EMAIL=#{email},
+		TEL=#{tel},
+		QQ_NUM=#{qqNum},
+		POST_CODE=#{postCode},
+		RACE=#{race},
+		HOBBY=#{hobby},
+		DEPT_ID=#{dept.id},
+		PICTURE=#{picture}
+		 where id=#{id}
+
+	</update>
+	<select id="selectEmpByLike" parameterType="Employee" resultMap="Empldemo">
+		select  * from hrm_employee where
+		<if test="job.id!=null and job.id    !=''">JOB_ID = #{job.id}</if>
+		 <if test="sex !=null and sex !=''">and SEX like #{sex}</if>
+        <if test="name !=null and name !=''">and  NAME like #{name} </if>
+        <if test="phone!=null and phone !=''">and  PHONE like #{phone}</if>
+        <if test="cardId !=null and cardId !=''">and  CARD_ID like #{cardId}</if>
+        <if test="dept.id!=null and dept.id !=''">and  DEPT_ID = #{dept.id}</if>
+	</select>
+
+	<select id="findExcel" resultType="EmpExcel" parameterType="EmpExcel">
+	SELECT e.id, e.name, e.sex, e.phone,
+	j.NAME AS jobName,
+	d.NAME AS deptName
+	FROM hrm_employee AS e
+	INNER JOIN hrm_dept AS d ON(e.DEPT_ID=d.ID)
+	INNER JOIN hrm_job AS j ON(e.JOB_ID=j.ID)
+</select>
+</mapper>

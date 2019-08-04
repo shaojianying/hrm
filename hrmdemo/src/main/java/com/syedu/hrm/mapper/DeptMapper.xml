@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.syedu.hrm.mapper.DeptMapper">
+	<select id="AllDept" resultType="Dept" parameterType="hashmap">
+		select * from hrm_dept order by id asc
+	</select>
+	<insert id="save" parameterType="Dept">
+		insert into hrm_dept set name =#{name},remark=#{remark}
+	</insert>
+	<select id="findAll" parameterType="Dept" resultType="Dept">
+		select *from hrm_dept
+	</select>
+	<delete id="delete" parameterType="int">
+		delete from  hrm_dept where id=#{id}
+	</delete>
+	<select id="get" resultType="Dept" parameterType="int">
+		SELECT *from  hrm_dept where id=#{id}
+	</select>
+	<select id="selectDeptById" parameterType="int" resultType="Dept">
+		Select *from hrm_dept where id=#{id}
+	</select>
+	<update id="update" parameterType="Dept">
+		update hrm_dept set NAME=#{name },REMARK=#{remark} where id=#{id}
+	</update>
+</mapper>

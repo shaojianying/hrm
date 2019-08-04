@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.syedu.hrm.mapper.DocumentMapper">
+    <insert id="addDocument" parameterType="Document">
+        insert into document (title,url,remark,createDate,userID)value (
+        #{title},#{url},#{remark},#{createDate},#{user.id}
+        )
+    </insert>
+    <select id="selectAllDocument" resultType="Document">
+        select *from document
+    </select>
+    <delete id="delectDocumentById" parameterType="int">
+        delete from document where id=#{id}
+    </delete>
+    <select id="selectDocumentById" parameterType="int" resultType="Document">
+        select *from document where id=#{id}
+    </select>
+    <select id="selectDocumentByTitle" parameterType="String" resultType="com.syedu.hrm.bean.Document">
+        select * from document where title like   "%"#{title}"%"
+    </select>
+    <update id="updateDocument" parameterType="Document">
+        update document set title=#{title},url=#{url},remark=#{remark},userID=#{user.id} where id=#{id}
+    </update>
+</mapper>
